@@ -1,0 +1,12 @@
+## Assigning elastic IPs
+
+#resource "aws_eip" "elasticip" {
+#    instance = aws_instance.web_instance.id
+
+#}
+
+output "EIP" {
+  value = var.public_subnet_one
+
+}
+~

@@ -1,0 +1,38 @@
+resource "aws_instance" "web_instance" {
+  #ami                         = lookup(var.ami_id, var.region)
+  ami                         = var.ami_id
+  instance_type               = var.instance_type
+  subnet_id                   = aws_subnet.custom-vpc-public-subnet-one.id
+  count                       = 2
+  vpc_security_group_ids      = [aws_security_group.custom-vpc-security-group.id]
+  key_name                    = var.key_name
+  associate_public_ip_address = true
+  tags = {
+    Name = "webtf_instance-${count.index}"
+    #Name  = "web_instance-withVolume"
+  }
+}
+
+### Instance in private subnet
+
+resource "aws_instance" "web_instance_private" {
+  #ami                         = lookup(var.ami_id, var.region)
+  ami                         = var.ami_id
+  instance_type               = var.instance_type
+  subnet_id                   = aws_subnet.custom-vpc-private-subnet-one.id
+  count                       = 1
+  vpc_security_group_ids      = [aws_security_group.custom-vpc-security-group.id]
+  key_name                    = var.key_name
+  associate_public_ip_address = false
+  tags = {
+    Name = "webtf_instance_private-${count.index}"
+    #Name  = "web_instance-withVolume"
+  }
+}
+
+### aws instance access key
+
+##resource "aws_key_pair" "deployer" {
+##key_name   = "deployer-key"
+##public_key =
+~

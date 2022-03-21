@@ -1,0 +1,21 @@
+##Launch configuration
+
+resource "aws_launch_configuration" "as_conf" {
+  name = "web_Lconfig"
+  #image_id        = lookup(var.ami_id, var.region)
+  image_id        = var.ami_id
+  instance_type   = var.instance_type
+  security_groups = ["${aws_security_group.custom-vpc-security-group.id}"]
+
+  user_data = <<-EOF
+              #!/bin/bash
+              apt -y install apache2
+              echo "Hello, from Terraform" > /var/www/html/index.html
+              systemctl start apache2
+              systemctl status apache2
+              EOF
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}

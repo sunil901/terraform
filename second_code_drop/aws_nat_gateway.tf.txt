@@ -1,0 +1,20 @@
+## aws NAT GW for Private NWK
+
+resource "aws_eip" "nat_eip" {
+  vpc        = true
+  depends_on = [aws_internet_gateway.custom-vpc-IGW]
+  tags = {
+    Name = "NAT Gateway EIP"
+  }
+}
+
+
+
+resource "aws_nat_gateway" "nat" {
+  allocation_id = aws_eip.nat_eip.id
+  subnet_id     = aws_subnet.custom-vpc-public-subnet-one.id
+
+  tags = {
+    Name = "Public NAT GW"
+  }
+}
